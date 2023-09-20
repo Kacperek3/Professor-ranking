@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QTableWidget, QTableWidgetIte
 from PyQt6 import QtCore
 import pyodbc
 import mysql.connector
-
+from PyQt6 import QtCore
 db_config = {
     "host": "localhost",     # Host bazy danych
     "user": "root",  # Nazwa użytkownika
@@ -19,13 +19,13 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.setStyleSheet("background-image: url(logo.png);")
 
         style_sheet = """
-                    QTextEdit {
+                    QLineEdit {
                         color: white;  
                         background-color: black;  
                         border: 3 solid black;
                         border-radius: 10px;
                     }
-                    QTextEdit::placeholder {
+                    QLineEdit::placeholder {
                         color: white;  
                         background-color: black; 
                     }
@@ -43,14 +43,14 @@ class LoginWindow(QtWidgets.QMainWindow):
                      }
                 """
 
-        self.textEdit_username.setStyleSheet(style_sheet)
-        self.textEdit_pasword.setStyleSheet(style_sheet)
+        self.lineEdit_username.setStyleSheet(style_sheet)
+        self.lineEdit_password.setStyleSheet(style_sheet)
         self.pushButton_2.setStyleSheet(style_sheet)
         self.pushButton.setStyleSheet(style_sheet)
         self.label_2.setStyleSheet(style_sheet)
 
         self.pushButton.clicked.connect(self.login)
-        self.pushButton_2.clicked.connect(self.other)
+        self.pushButton_2.clicked.connect(self.RegisterWin)
         self.register_window = None
 
     def login(self):
@@ -60,12 +60,12 @@ class LoginWindow(QtWidgets.QMainWindow):
         rows = cursor.fetchall()
 
         for row in rows:
-            if row[0] == self.textEdit_username.toPlainText() and row[1] == self.textEdit_pasword.toPlainText():
+            if row[0] == self.lineEdit_username.toPlainText() and row[1] == self.lineEdit_password.toPlainText():
                 print("zalogowano")
         conn.close()
 
-    def other(self):
+    def RegisterWin(self):
         from register import RegisterWindow
-        self.register_window = RegisterWindow()  # Tworzenie instancji RegisterWindow
+        self.register_window = RegisterWindow()
         self.register_window.show()
         self.close()

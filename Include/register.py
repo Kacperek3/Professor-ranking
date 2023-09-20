@@ -7,11 +7,11 @@ from PyQt6 import QtCore
 import pyodbc
 
 
-server = 'demopython2023.database.windows.net'
-database = 'demo'
-username = 'sqladmin'
-password = 'Tytan.2004'
-driver = '{ODBC Driver 17 for SQL Server}'
+db_config = {
+    "host": "localhost",     # Host bazy danych
+    "user": "root",  # Nazwa użytkownika
+    "database": "ranking"   # Nazwa bazy danych
+}
 
 
 class RegisterWindow(QtWidgets.QMainWindow):
@@ -22,7 +22,7 @@ class RegisterWindow(QtWidgets.QMainWindow):
         self.setStyleSheet("background-image: url(logo.png);")
         self.setFixedSize(601,474)
         style_sheet = """
-                    QTextEdit {
+                    QLineEdit {
                         color: white;  
                         background-color: black;  
                         border: 3 solid black;
@@ -46,8 +46,8 @@ class RegisterWindow(QtWidgets.QMainWindow):
                      }
                 """
 
-        self.textEdit_username.setStyleSheet(style_sheet)
-        self.textEdit_pasword.setStyleSheet(style_sheet)
+        self.lineEdit_username.setStyleSheet(style_sheet)
+        self.lineEdit_password.setStyleSheet(style_sheet)
         self.pushButton_2.setStyleSheet(style_sheet)
         self.pushButton.setStyleSheet(style_sheet)
         self.label_2.setStyleSheet(style_sheet)
@@ -57,15 +57,15 @@ class RegisterWindow(QtWidgets.QMainWindow):
         self.login_Window = None
 
     def register(self):
-        conn = pyodbc.connect(f'SERVER={server};DATABASE={database};UID={username};PWD={password};DRIVER={driver}')
+        conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM Logowanie")
+        cursor.execute("SELECT * FROM login")
         rows = cursor.fetchall()
 
         wprowadzone_haslo = self.textEdit_pasword.toPlainText()
 
         for row in rows:
-            if row[0] == self.textEdit_username.toPlainText() and row[1] == self.textEdit_pasword.toPlainText():
+            if row[0] == self.lineEdit_username.toPlainText() and row[1] == self.lineEdit_password.toPlainText():
                 print("zalogowano")
         conn.close()
 
