@@ -6,9 +6,9 @@ import pyodbc
 import mysql.connector
 from PyQt6 import QtCore
 db_config = {
-    "host": "localhost",     # Host bazy danych
-    "user": "root",  # Nazwa użytkownika
-    "database": "ranking"   # Nazwa bazy danych
+    "host": "localhost",
+    "user": "root",
+    "database": "ranking"
 }
 
 class LoginWindow(QtWidgets.QMainWindow):
@@ -16,7 +16,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("logowanie.ui", self)
 
-        self.setStyleSheet("background-image: url(logo.png);")
+        self.setStyleSheet("background-image: url(logoLogowanie.png);")
 
         style_sheet = """
                     QLineEdit {
@@ -56,11 +56,10 @@ class LoginWindow(QtWidgets.QMainWindow):
     def login(self):
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM login")
+        cursor.execute("SELECT * FROM logowanie")
         rows = cursor.fetchall()
-
         for row in rows:
-            if row[0] == self.lineEdit_username.toPlainText() and row[1] == self.lineEdit_password.toPlainText():
+            if row[0] == self.lineEdit_username.text() and row[2] == self.lineEdit_password.text():
                 print("zalogowano")
         conn.close()
 

@@ -458,7 +458,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_password_2">
+   <widget class="QLineEdit" name="lineEdit_password">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -471,7 +471,7 @@
      <enum>QLineEdit::Password</enum>
     </property>
     <property name="placeholderText">
-     <string>                           Password</string>
+     <string>                             Hasło</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_username">
@@ -482,6 +482,9 @@
       <width>211</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="placeholderText">
+     <string>                  Nazwa uzytkownika</string>
     </property>
    </widget>
   </widget>

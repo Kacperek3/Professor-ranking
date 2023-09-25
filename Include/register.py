@@ -2,15 +2,16 @@ import sys
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QWidget, QTableWidget, QTableWidgetItem, QHBoxLayout, QVBoxLayout, \
     QHeaderView, QPushButton, QScrollArea, QLabel, QMainWindow, QInputDialog, QLineEdit, QFormLayout, QDialogButtonBox, \
-    QDialog
+    QDialog, QMessageBox
 from PyQt6 import QtCore
+import mysql.connector
 import pyodbc
-
+import validators
 
 db_config = {
-    "host": "localhost",     # Host bazy danych
-    "user": "root",  # Nazwa użytkownika
-    "database": "ranking"   # Nazwa bazy danych
+    "host": "localhost",
+    "user": "root",
+    "database": "ranking"
 }
 
 
@@ -19,7 +20,7 @@ class RegisterWindow(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("rejestracja.ui", self)
 
-        self.setStyleSheet("background-image: url(logo.png);")
+        self.setStyleSheet("background-image: url(logoRejestracja.png);")
         self.setFixedSize(601,474)
         style_sheet = """
                     QLineEdit {
@@ -47,30 +48,33 @@ class RegisterWindow(QtWidgets.QMainWindow):
                 """
 
         self.lineEdit_username.setStyleSheet(style_sheet)
+        self.lineEdit_email.setStyleSheet(style_sheet)
         self.lineEdit_password.setStyleSheet(style_sheet)
         self.pushButton_2.setStyleSheet(style_sheet)
         self.pushButton.setStyleSheet(style_sheet)
         self.label_2.setStyleSheet(style_sheet)
 
         self.pushButton.clicked.connect(self.register)
-        self.pushButton_2.clicked.connect(self.other)
+        self.pushButton_2.clicked.connect(self.LoginWin)
         self.login_Window = None
 
     def register(self):
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM login")
-        rows = cursor.fetchall()
+        if (validators.email(self.lineEdit_email.text()) and not ' ' in self.lineEdit_username.text()  and not ' ' in self.lineEdit_password.text()
+                and self.lineEdit_username.text() and self.lineEdit_password.text()):
+            print("zdane")
+        else:
+            self.show_message_box()
 
-        wprowadzone_haslo = self.textEdit_pasword.toPlainText()
+    def show_message_box(self):
+        # Tworzenie MessageBoxa
+        message_box = QMessageBox()
+        message_box.setWindowTitle("BŁĄD")
+        message_box.setText("Błąd podczas rejestracji.")
+        message_box.setIcon(QMessageBox.Icon.Information)
+        message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        message_box.exec()
 
-        for row in rows:
-            if row[0] == self.lineEdit_username.toPlainText() and row[1] == self.lineEdit_password.toPlainText():
-                print("zalogowano")
-        conn.close()
-
-
-    def other(self):
+    def LoginWin(self):
         from login import LoginWindow
         self.login_Window = LoginWindow()
         self.login_Window.show()
