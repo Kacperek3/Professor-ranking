@@ -10,4 +10,4 @@ if __name__ == '__main__':
     window = LoginWindow()
     window.show()
     sys.exit(app.exec())
-    print("alan")
+

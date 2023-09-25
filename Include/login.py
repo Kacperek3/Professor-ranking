@@ -25,10 +25,6 @@ class LoginWindow(QtWidgets.QMainWindow):
                         border: 3 solid black;
                         border-radius: 10px;
                     }
-                    QLineEdit::placeholder {
-                        color: white;  
-                        background-color: black; 
-                    }
                     QLabel{
                         color: white;
                     }

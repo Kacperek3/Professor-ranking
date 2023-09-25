@@ -29,10 +29,6 @@ class RegisterWindow(QtWidgets.QMainWindow):
                         border: 3 solid black;
                         border-radius: 10px;
                     }
-                    QTextEdit::placeholder {
-                        color: white;  
-                        background-color: black; 
-                    }
                     QLabel{
                         color: white;
                     }
@@ -59,20 +55,32 @@ class RegisterWindow(QtWidgets.QMainWindow):
         self.login_Window = None
 
     def register(self):
+        style_sheet_invalid = """
+                            QLineEdit {
+                                color: white;  
+                                background-color: red;  
+                                border: 3 solid red;
+                                border-radius: 10px;
+                            }
+                    """
         if (validators.email(self.lineEdit_email.text()) and not ' ' in self.lineEdit_username.text()  and not ' ' in self.lineEdit_password.text()
                 and self.lineEdit_username.text() and self.lineEdit_password.text()):
             print("zdane")
         else:
-            self.show_message_box()
+            if not validators.email(self.lineEdit_email.text()):
+                self.lineEdit_email.setStyleSheet(style_sheet_invalid)
 
-    def show_message_box(self):
-        # Tworzenie MessageBoxa
-        message_box = QMessageBox()
-        message_box.setWindowTitle("BŁĄD")
-        message_box.setText("Błąd podczas rejestracji.")
-        message_box.setIcon(QMessageBox.Icon.Information)
-        message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-        message_box.exec()
+            if  ' ' in self.lineEdit_username.text() or not self.lineEdit_username.text():
+                self.lineEdit_username.setStyleSheet(style_sheet_invalid)
+
+            if  ' ' in self.lineEdit_password.text() or not self.lineEdit_password.text():
+                self.lineEdit_password.setStyleSheet(style_sheet_invalid)
+
+
+
+
+
+
 
     def LoginWin(self):
         from login import LoginWindow
