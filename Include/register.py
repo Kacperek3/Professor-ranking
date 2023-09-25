@@ -8,6 +8,7 @@ import mysql.connector
 import pyodbc
 import validators
 import styles
+import messagebox
 
 db_config = {
     "host": "localhost",
@@ -39,7 +40,31 @@ class RegisterWindow(QtWidgets.QMainWindow):
     def register(self):
         if (validators.email(self.lineEdit_email.text()) and not ' ' in self.lineEdit_username.text()  and not ' ' in self.lineEdit_password.text()
                 and self.lineEdit_username.text() and self.lineEdit_password.text()):
-            print("zdane")
+            self.lineEdit_username.setStyleSheet(styles.style_sheet)
+            self.lineEdit_email.setStyleSheet(styles.style_sheet)
+            self.lineEdit_password.setStyleSheet(styles.style_sheet)
+            connection = mysql.connector.connect(**db_config)
+            cursor = connection.cursor()
+
+            cursor.execute("SELECT username, email FROM logowanie")
+            rows = cursor.fetchall()
+            for row in rows:
+                if row[0] == self.lineEdit_username.text():
+                    self.lineEdit_username.setStyleSheet(styles.style_sheet_invalid_data_register)
+                    messagebox.show_message_box_same_username_database()
+                    return
+                if row[1] == self.lineEdit_email.text():
+                    self.lineEdit_email.setStyleSheet(styles.style_sheet_invalid_data_register)
+                    messagebox.show_message_box_same_email_database()
+                    return
+
+            insert_query = "INSERT INTO logowanie (username, email, password) VALUES (%s, %s, %s)"
+            data_to_insert = (self.lineEdit_username.text(), self.lineEdit_email.text(), self.lineEdit_password.text())
+            cursor.execute(insert_query, data_to_insert)
+            connection.commit()
+            cursor.close()
+            connection.close()
+
         else:
             if not validators.email(self.lineEdit_email.text()):
                 self.lineEdit_email.setStyleSheet(styles.style_sheet_invalid_data_register)
@@ -56,17 +81,7 @@ class RegisterWindow(QtWidgets.QMainWindow):
             else:
                 self.lineEdit_password.setStyleSheet(styles.style_sheet_valid_data_register)
 
-
-            self.show_message_box()
-    def show_message_box(self):
-        message_box = QMessageBox()
-        message_box.setWindowTitle("BŁĄD")
-        message_box.setText("Nieprawidłwe dane.")
-        message_box.setIcon(QMessageBox.Icon.Information)
-        message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-        message_box.exec()
-
-
+            messagebox.show_message_box_wrong_data_register()
 
     def LoginWin(self):
         from login import LoginWindow
