@@ -5,6 +5,7 @@ from PyQt6 import QtCore
 import pyodbc
 import mysql.connector
 from PyQt6 import QtCore
+
 db_config = {
     "host": "localhost",
     "user": "root",
