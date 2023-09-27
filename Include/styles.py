@@ -36,3 +36,9 @@ style_sheet_valid_data_register = """
                                 border-radius: 10px;
                             }
                     """
+
+style_sheet_general_window = """
+                            QWidget#centralwidget{
+                            background-image: url(logoGeneral.png);
+                        }
+                        """

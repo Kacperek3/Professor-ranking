@@ -5,6 +5,7 @@ from PyQt6 import QtCore
 import pyodbc
 import mysql.connector
 from PyQt6 import QtCore
+import styles
 
 db_config = {
     "host": "localhost",
@@ -19,32 +20,11 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.setStyleSheet("background-image: url(logoLogowanie.png);")
 
-        style_sheet = """
-                    QLineEdit {
-                        color: white;  
-                        background-color: black;  
-                        border: 3 solid black;
-                        border-radius: 10px;
-                    }
-                    QLabel{
-                        color: white;
-                    }
-                    QPushButton{
-                        color: white;  
-                        border: 3 solid black;
-                        border-radius: 10px;
-                    }
-                     QPushButton:pressed {
-                        background-color: gray; 
-                        border: 1px solid black;
-                     }
-                """
-
-        self.lineEdit_username.setStyleSheet(style_sheet)
-        self.lineEdit_password.setStyleSheet(style_sheet)
-        self.pushButton_2.setStyleSheet(style_sheet)
-        self.pushButton.setStyleSheet(style_sheet)
-        self.label_2.setStyleSheet(style_sheet)
+        self.lineEdit_username.setStyleSheet(styles.style_sheet)
+        self.lineEdit_password.setStyleSheet(styles.style_sheet)
+        self.pushButton_2.setStyleSheet(styles.style_sheet)
+        self.pushButton.setStyleSheet(styles.style_sheet)
+        self.label_2.setStyleSheet(styles.style_sheet)
 
         self.pushButton.clicked.connect(self.login)
         self.pushButton_2.clicked.connect(self.RegisterWin)
@@ -57,7 +37,10 @@ class LoginWindow(QtWidgets.QMainWindow):
         rows = cursor.fetchall()
         for row in rows:
             if row[0] == self.lineEdit_username.text() and row[2] == self.lineEdit_password.text():
-                print("zalogowano")
+                from general import GeneralWindow
+                self.general_window = GeneralWindow(self.lineEdit_username.text())
+                self.general_window.show()
+                self.close()
         conn.close()
 
     def RegisterWin(self):
